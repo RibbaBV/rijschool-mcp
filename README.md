@@ -82,6 +82,16 @@ De server praat standaard met de publieke leesomgeving van Ribba. Wie een eigen 
 | `RIBBA_SUPABASE_URL` | De publieke Ribba-database |
 | `RIBBA_SUPABASE_ANON_KEY` | De publieke leessleutel |
 
+## Testen
+
+```bash
+npm install
+npm run build
+npm test
+```
+
+De tests praten met de echte database, dus je hebt een verbinding nodig. Ze controleren niet alleen dat elk gereedschap antwoordt, maar ook dat de cijfers kloppen: dat totalen optellen, dat ranglijsten aflopend staan, dat drempels en filters echt worden toegepast en dat de links naar ribba.nl de vorm hebben die de site bouwt.
+
 ## Zelf draaien
 
 ```bash
@@ -89,6 +99,8 @@ npm install
 npm run build
 node dist/index.js
 ```
+
+De server praat JSON-RPC over stdin en stdout. Handmatig starten is vooral nuttig om de foutuitvoer te zien; normaal doet je MCP-client dit.
 
 ## Licentie
 

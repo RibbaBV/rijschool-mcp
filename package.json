@@ -37,7 +37,8 @@
     "build": "tsc",
     "prepublishOnly": "npm run build",
     "start": "node dist/index.js",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "node --test 'test/**/*.test.mjs'"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.30.0",
