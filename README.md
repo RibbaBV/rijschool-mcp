@@ -4,21 +4,42 @@ Een MCP-server met alle rijscholen van Nederland: adres, contactgegevens, prijze
 
 Ruim zevenduizend rijscholen, doorzoekbaar op stad, provincie, naam of coördinaten, en te filteren op automaat, prijs, beoordeling en slagingspercentage.
 
-Gemaakt door [Ribba](https://ribba.nl).
+Gemaakt en onderhouden door **[Ribba](https://ribba.nl)**, de vergelijker voor rijscholen en gratis theorie in Nederland.
 
 ## Installeren
 
-Voeg de server toe aan je MCP-client. Er is geen sleutel nodig.
+Er is geen account en geen sleutel nodig. Elke client hieronder start de server zelf met `npx`, dus je hoeft niets vooraf te installeren behalve Node 20 of nieuwer.
 
 ### Claude Code
 
 ```bash
-claude mcp add rijschool -- npx -y @ribba/rijschool-mcp
+claude mcp add --scope user rijschool -- npx -y @ribba/rijschool-mcp
 ```
 
-### Claude Desktop, Cursor, Windsurf en andere clients
+`--scope user` schrijft hem naar `~/.claude.json`, waarmee hij in al je projecten werkt en ook beschikbaar is in het Code-tabblad van de desktop-app. Laat je `--scope` weg, dan geldt hij alleen in de map waar je op dat moment staat. Wil je hem juist met je team delen, gebruik dan `--scope project`: die schrijft naar `.mcp.json` in de repo, en dat bestand hoort in versiebeheer.
 
-In `claude_desktop_config.json` of het equivalent van je client:
+### Codex
+
+```bash
+codex mcp add rijschool -- npx -y @ribba/rijschool-mcp
+```
+
+Of met de hand in `~/.codex/config.toml`:
+
+```toml
+[mcp_servers.rijschool]
+command = "npx"
+args = ["-y", "@ribba/rijschool-mcp"]
+```
+
+De Codex-CLI, de IDE-extensie en de ChatGPT-desktopapp lezen alle drie datzelfde bestand, dus één keer instellen is genoeg. Zet je het in `.codex/config.toml` binnen een project, dan geldt het alleen daar.
+
+### Claude Desktop
+
+De chat-app deelt zijn instellingen niet met Claude Code en heeft een eigen bestand:
+
+- macOS: `~/Library/Application Support/Claude/claude_desktop_config.json`
+- Windows: `%APPDATA%\Claude\claude_desktop_config.json`
 
 ```json
 {
@@ -30,6 +51,12 @@ In `claude_desktop_config.json` of het equivalent van je client:
   }
 }
 ```
+
+Herstart de app daarna. Heb je hem daar al staan en wil je hem ook in Claude Code, dan neemt `claude mcp add-from-claude-desktop` hem over.
+
+### Cursor, Windsurf en andere clients
+
+Dezelfde JSON als hierboven, in het configuratiebestand van je client.
 
 ## Wat je kunt vragen
 
@@ -113,6 +140,17 @@ node dist/index.js
 ```
 
 De server praat JSON-RPC over stdin en stdout. Handmatig starten is vooral nuttig om de foutuitvoer te zien; normaal doet je MCP-client dit.
+
+## Deze rijscholen op het web
+
+Elke rijschool in deze gegevens heeft een eigen pagina op **[ribba.nl](https://ribba.nl)**, met cijfers, prijzen, beoordelingen en een kaart:
+
+- [Rijscholen vergelijken](https://ribba.nl/rijscholen) in heel Nederland
+- [Per provincie](https://ribba.nl/rijscholen/provincies) en per stad
+- [Slagingspercentages](https://ribba.nl/slagingspercentages) van het CBR
+- [De gids](https://ribba.nl/gids): rijles, kosten en het examen uitgelegd
+
+Elk zoekresultaat bevat een `pagina`-veld dat naar de pagina van die rijschool wijst.
 
 ## Licentie
 
