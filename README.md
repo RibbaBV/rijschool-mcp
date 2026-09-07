@@ -44,12 +44,22 @@ In `claude_desktop_config.json` of het equivalent van je client:
 
 | Naam | Wat het teruggeeft |
 | --- | --- |
-| `zoek_rijscholen` | Zoeken op stad, provincie, naam of werkgebied, met filters op slagingspercentage, beoordeling, prijs en lestype. |
+| `zoek_rijscholen` | Zoeken op vrije tekst, stad, provincie of werkgebied, met filters op slagingspercentage, beoordeling, prijs en lestype. |
 | `rijschool` | Alle gegevens van één rijschool, inclusief prijslijst, openingstijden, KvK en WRM-nummer. |
 | `rijscholen_in_de_buurt` | De dichtstbijzijnde rijscholen bij een punt, met de afstand erbij. |
 | `steden` | Alle plaatsen met rijscholen, met aantal, gemiddeld slagingspercentage en gemiddelde prijs. |
 | `provincies` | De twaalf provincies met hun cijfers en grootste steden. |
 | `prijspeil` | De spreiding van de lesprijs: goedkoopste, mediaan, duurste, landelijk of per gebied. |
+
+## Hoe het zoeken werkt
+
+`zoek_rijscholen` en `rijscholen_in_de_buurt` gaan via de zoekindex van Ribba. Dat scheelt niet alleen tijd, het maakt het zoeken ook beter: `zoekterm` verdraagt een typefout, dus "rijshcool" vindt gewoon de rijscholen. De structuurfilters (`stad`, `provincie`, `werkgebied`, `automaat`, prijs, beoordeling) worden in de index afgehandeld, niet achteraf.
+
+Eén cijfer haalt de server daarna alsnog uit de database bij de gevonden scholen: `gemiddelde_examencentrum`. Dat staat niet in de index en juist dat cijfer maakt een slagingspercentage leesbaar.
+
+De overige gereedschappen lezen rechtstreeks uit de database. `rijschool` omdat je daar de volledige, actuele gegevens wilt, en `steden`, `provincies` en `prijspeil` omdat die percentielen en gemiddelden over alle rijscholen berekenen.
+
+De index loopt op de database achteraan: hij wordt na elke gegevensverversing opnieuw opgebouwd. Voor een naam die vandaag is gewijzigd is `rijschool` dus de betrouwbaarste bron.
 
 ## De gegevens goed lezen
 
@@ -81,6 +91,8 @@ De server praat standaard met de publieke leesomgeving van Ribba. Wie een eigen 
 | --- | --- |
 | `RIBBA_SUPABASE_URL` | De publieke Ribba-database |
 | `RIBBA_SUPABASE_ANON_KEY` | De publieke leessleutel |
+| `RIBBA_TYPESENSE_HOST` | De zoekindex van Ribba |
+| `RIBBA_TYPESENSE_KEY` | De publieke zoeksleutel |
 
 ## Testen
 

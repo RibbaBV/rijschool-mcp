@@ -74,6 +74,26 @@ describe('zoeken', () => {
       'werkgebied levert alleen scholen die er ook gevestigd zijn');
   });
 
+  test('een typefout in de naam vindt de school alsnog', async () => {
+    // Omgedraaide letters, geen voorvoegsel van een bestaand woord: dit vindt
+    // een deelstringvergelijking niet en een index met typotolerantie wel.
+    const { data } = await server.roep('zoek_rijscholen', { zoekterm: 'rijshcool', limiet: 5, minimum_examens: 0 });
+    assert.ok(data.rijscholen.length > 0);
+    assert.ok(data.rijscholen.every((s) => /rijschool/i.test(s.naam)),
+      `typotolerantie werkt niet: ${data.rijscholen.map((s) => s.naam).join(', ')}`);
+  });
+
+  test('vrije tekst zoekt ook op plaats, niet alleen op naam', async () => {
+    const { data } = await server.roep('zoek_rijscholen', { zoekterm: 'Middelburg', limiet: 5, minimum_examens: 0 });
+    assert.ok(data.rijscholen.length > 0);
+  });
+
+  test('het gemiddelde van het examencentrum komt mee uit de database', async () => {
+    const { data } = await server.roep('zoek_rijscholen', { stad: 'Utrecht', limiet: 10 });
+    assert.ok(data.rijscholen.some((s) => typeof s.gemiddelde_examencentrum === 'number'),
+      'de verrijking uit de database leverde niets op');
+  });
+
   test('een onmogelijke combinatie geeft uitleg, geen lege lijst', async () => {
     const r = await server.roep('zoek_rijscholen', { stad: 'Atlantis' });
     assert.ok(r.fout);

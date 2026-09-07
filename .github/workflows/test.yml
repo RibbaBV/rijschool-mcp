@@ -1,0 +1,26 @@
+name: test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: ['20', '22', '24']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      # Deze tests praten met de publieke leesomgeving van Ribba, dus de
+      # runner moet het net op. Er zijn geen geheimen nodig: de server draait
+      # op sleutels die ribba.nl zelf al in zijn browserbundel meestuurt.
+      - run: npm test
+        timeout-minutes: 5
