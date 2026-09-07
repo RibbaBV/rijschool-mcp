@@ -1,12 +1,11 @@
 /**
- * Lezen uit de Ribba-database, zonder sleutel van de gebruiker.
+ * Lezen uit de openbare gegevens van Ribba.
  *
- * De tabel cbr_rijscholen staat op publiek leesbaar en de sleutel hieronder is
- * de anon-sleutel die ribba.nl zelf al in zijn browserbundel meestuurt. Er
- * gaat dus niets open dat niet al open stond, en de server werkt daardoor
- * meteen na installeren: geen account, geen aanmelding, geen configuratie.
+ * De sleutel hieronder is een publieke leessleutel: hij geeft toegang tot
+ * precies de gegevens die ook op ribba.nl staan, en tot niets anders. Daardoor
+ * werkt de server meteen na installeren, zonder account of configuratie.
  *
- * Wie een eigen kopie van de database draait, zet RIBBA_SUPABASE_URL en
+ * Wie een eigen omgeving draait, zet RIBBA_SUPABASE_URL en
  * RIBBA_SUPABASE_ANON_KEY en de server praat daar tegen.
  */
 const BASIS = process.env.RIBBA_SUPABASE_URL ?? 'https://jlieozuxdhfxuveapgse.supabase.co';

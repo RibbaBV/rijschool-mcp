@@ -1,15 +1,8 @@
 /**
- * Welke kolommen deze server uitgeeft, en welke bewust niet.
+ * Welke velden deze server uitgeeft.
  *
- * Buiten de lijst blijven summary_short, summary_long en listicle_blurb. Dat
- * zijn door een taalmodel geschreven zinnen over een rijschool. Ze komen hier
- * in de invoer van een ánder taalmodel terecht, en daar zijn ze niet meer van
- * een feit te onderscheiden. Wie een omschrijving wil, leest de pagina op
- * ribba.nl, waar erbij staat waar hij vandaan komt.
- *
- * De losse recensieteksten van Google blijven er ook uit: dat is tekst van
- * derden, en het cijfer met een verwijzing naar de bron zegt hetzelfde zonder
- * die tekst over te nemen.
+ * LICHT is de lijst voor een resultaatlijst, VOL die voor één rijschool. Alles
+ * wat er niet in staat, geeft deze server niet terug.
  */
 export const LICHT = [
   'id', 'name', 'city', 'service_province', 'lat', 'lon',

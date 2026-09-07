@@ -58,6 +58,23 @@ Herstart de app daarna. Heb je hem daar al staan en wil je hem ook in Claude Cod
 
 Dezelfde JSON als hierboven, in het configuratiebestand van je client.
 
+## Werkt het?
+
+Vraag je client:
+
+> Hoeveel rijscholen zijn er in Utrecht?
+
+Komt er een antwoord met cijfers, dan staat de server. Zo niet:
+
+- **De server staat er niet bij.** De meeste clients lezen hun instellingen alleen bij het opstarten. Sluit hem helemaal af en start opnieuw.
+- **`npx: command not found` of een foutmelding over de Node-versie.** Je hebt Node 20 of nieuwer nodig. Controleer met `node --version`; installeren kan via [nodejs.org](https://nodejs.org).
+- **De eerste keer duurt even.** `npx` haalt het pakket dan nog op. Daarna start hij meteen.
+- **Het duurt lang, of je krijgt een foutmelding over een verbinding.** Deze server haalt zijn gegevens op bij Ribba, dus hij heeft internet nodig. Zit je achter een bedrijfsproxy of firewall, dan moet die `registry.npmjs.org`, `ribba.nl` en de bijbehorende diensten doorlaten.
+
+- **Nog steeds niets?** Start de server met de hand en kijk wat hij zegt: `npx -y @ribba/rijschool-mcp`. Hij wacht dan op invoer, wat betekent dat hij werkt; foutmeldingen komen erbij te staan.
+
+Kom je er niet uit, [open een issue](https://github.com/RibbaBV/rijschool-mcp/issues) of mail [team@ribba.nl](mailto:team@ribba.nl).
+
 ## Wat je kunt vragen
 
 - Welke rijscholen in Den Haag geven automaatles en hebben minstens 4,5 sterren?
@@ -96,30 +113,11 @@ De index loopt op de database achteraan: hij wordt na elke gegevensverversing op
 
 **Werkgebied is niet hetzelfde als vestigingsplaats.** Veel rijscholen geven les in plaatsen waar ze niet gevestigd zijn. Zoek je op `stad`, dan krijg je de rijscholen die er zitten; zoek je op `werkgebied`, dan die er lesgeven.
 
-## Wat er bewust niet in zit
-
-Twee soorten velden geeft deze server niet terug, ook al staan ze in de database.
-
-De omschrijvingen van rijscholen (`summary_short`, `summary_long`, `listicle_blurb`) zijn door een taalmodel geschreven. Ze zouden hier in de invoer van een ánder taalmodel terechtkomen, en daar zijn ze niet meer van een feit te onderscheiden. Op ribba.nl staan ze wel, met erbij waar ze vandaan komen.
-
-De losse recensieteksten van Google blijven er ook uit. Dat is tekst van derden. Het cijfer, het aantal recensies en een verwijzing naar de bron staan er wel in, en die zeggen hetzelfde zonder die tekst over te nemen.
-
 ## Waar de gegevens vandaan komen
 
 De rijscholen en hun examencijfers komen uit de openbare CBR-publicatie en worden wekelijks opgehaald. Adres, KvK en WRM-nummer komen uit dezelfde bron. Beoordelingen, openingstijden en categorie komen van Google. Prijzen zijn overgenomen van de websites van de rijscholen zelf.
 
 Staat er iets fout over jouw rijschool, of wil je niet in deze gegevens voorkomen? Mail [team@ribba.nl](mailto:team@ribba.nl), dan passen we het aan.
-
-## Instellingen
-
-De server praat standaard met de publieke leesomgeving van Ribba. Wie een eigen kopie draait, zet twee omgevingsvariabelen:
-
-| Variabele | Standaard |
-| --- | --- |
-| `RIBBA_SUPABASE_URL` | De publieke Ribba-database |
-| `RIBBA_SUPABASE_ANON_KEY` | De publieke leessleutel |
-| `RIBBA_TYPESENSE_HOST` | De zoekindex van Ribba |
-| `RIBBA_TYPESENSE_KEY` | De publieke zoeksleutel |
 
 ## Testen
 

@@ -113,17 +113,28 @@ describe('één rijschool', () => {
     assert.match(data.pagina, /^https:\/\/ribba\.nl\/rijscholen\//);
   });
 
-  test('geeft geen door een taalmodel geschreven omschrijving terug', async () => {
-    const { tekst } = await server.roep('rijschool', { school_id: 6502 });
-    for (const veld of ['summary_short', 'summary_long', 'listicle_blurb']) {
-      assert.ok(!tekst.includes(veld), `${veld} lekt mee naar buiten`);
-    }
+  test('geeft precies de afgesproken velden terug en niets meer', async () => {
+    // Een witte lijst en geen zwarte: zo valt ook een veld op dat er later bij
+    // komt zonder dat iemand erover heeft nagedacht.
+    const { data } = await server.roep('rijschool', { school_id: 6502 });
+    assert.deepEqual(Object.keys(data).sort(), [
+      'adres', 'cbr', 'contact', 'eigen_pagina_bevestigd', 'google', 'lessen',
+      'naam', 'opgehaald_op', 'pagina', 'prijzen', 'provincie', 'registratie',
+      'school_id', 'stad', 'werkgebied',
+    ]);
+    assert.deepEqual(Object.keys(data.google).sort(), [
+      'aantal_recensies', 'beoordeling', 'categorie', 'geverifieerd',
+      'openingstijden', 'recensies', 'status',
+    ]);
   });
 
-  test('geeft geen losse Google-recensieteksten terug', async () => {
-    const { tekst } = await server.roep('rijschool', { school_id: 6502 });
-    assert.ok(!tekst.includes('review_text'), 'recensietekst van derden lekt mee');
-    assert.ok(!tekst.includes('google_reviews_json'));
+  test('een zoekresultaat geeft precies de afgesproken velden terug', async () => {
+    const { data } = await server.roep('zoek_rijscholen', { stad: 'Utrecht', limiet: 1 });
+    assert.deepEqual(Object.keys(data.rijscholen[0]).sort(), [
+      'automaat', 'eerste_examens', 'gemiddelde_examencentrum', 'google_beoordeling',
+      'google_recensies', 'naam', 'pagina', 'provincie', 'school_id', 'slagingspercentage_eerste_examen',
+      'stad', 'telefoon', 'vanaf_prijs_per_les', 'website',
+    ]);
   });
 
   test('een dubbelzinnige naam vraagt om te kiezen', async () => {

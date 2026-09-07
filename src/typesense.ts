@@ -1,18 +1,16 @@
 /**
- * Zoeken via Typesense in plaats van de hele tabel ophalen.
+ * Zoeken via de zoekindex van Ribba.
  *
- * De eerste zoekopdracht kostte bijna zes seconden: alle 7099 rijscholen over
- * de lijn trekken en in het geheugen filteren. Dezelfde vraag kost hier acht
- * tot twintig milliseconde, want Typesense heeft er een index op. En zoeken op
- * naam wordt er beter van: "verkeerschol" vindt "Verkeersschool", en dat doet
- * een deelstringvergelijking niet.
+ * Een index doet twee dingen die een lijst doorlopen niet doet: hij antwoordt
+ * in milliseconden, en hij verdraagt een typefout. "verkeerschol" vindt
+ * "Verkeersschool"; een deelstringvergelijking vindt niets.
  *
- * De zoeksleutel hieronder is de publieke zoeksleutel die ribba.nl zelf al in
- * zijn browserbundel meestuurt. Hij mag alleen zoeken, niets schrijven.
+ * De sleutel hieronder is een publieke zoeksleutel. Hij mag zoeken en verder
+ * niets.
  *
- * De index is een spiegel van de database en loopt er dus achteraan, en hij
- * heeft niet alle kolommen. Wat ontbreekt haalt de aanroeper erbij uit de
- * database; zie verrijk() in index.ts.
+ * De index is een spiegel van de gegevens en loopt er iets achteraan, en hij
+ * draagt niet elk veld. Wat ontbreekt vult de aanroeper aan; zie opmaken() in
+ * index.ts.
  */
 const HOST = process.env.RIBBA_TYPESENSE_HOST ?? 'hz84j51gpbvtiulcp-1.a2.typesense.net';
 const SLEUTEL = process.env.RIBBA_TYPESENSE_KEY ?? 'b7aLF80a9tmXDzUOR1Jkp5Nn0qIb2STM';
